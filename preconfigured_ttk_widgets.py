@@ -34,16 +34,37 @@ def class_factory(name, OriginalWidget, defaults):
                    })
         self.tk.call(('grid', 'configure', self._w) + self._options(cnf, kw))
               
-    newclass = type(name, (OriginalWidget,), {'grid': grid})  
+    @property
+    def text(self):
+        return self.get()
+        
+    @text.setter
+    def text(self, value):
+        self.configure(text=value)
+        
+    widget_functions = {'grid': grid, 'text': text}
+        
+    if name == 'Button':
+        @property
+        def command(self):
+            self.cget('command')
+            
+        @command.setter
+        def command(self, value):
+            self.configure(command=value)
+            
+        widget_functions.update({'command': command})
+            
+    newclass = type(name, (OriginalWidget,), widget_functions)
     globals()[name] = newclass
     
 subwidget_creation = (
-                      ('L', ttk.Label, (4, 4, 'w')), 
-                      ('E', ttk.Entry, (4, 4, 'w')), 
-                      ('B', ttk.Button, (4, 4, 'w')),
-                      ('LF', ttk.LabelFrame, (10, 10, 'w')),
-                      ('LB', ImprovedListbox, (0, 0, 'w')),
-                      ('SB', tk.Scrollbar, (0, 0, 'ns'))
+                      ('Label', ttk.Label, (4, 4, 'w')), 
+                      ('Entry', ttk.Entry, (4, 4, 'w')), 
+                      ('Button', ttk.Button, (4, 4, 'w')),
+                      ('Labelframe', ttk.LabelFrame, (10, 10, 'w')),
+                      ('Listbox', ImprovedListbox, (0, 0, 'w')),
+                      ('Scrollbar', tk.Scrollbar, (0, 0, 'ns'))
                       )
     
 for subwidget, ttk_class, defaults in subwidget_creation:

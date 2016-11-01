@@ -1,4 +1,4 @@
-# Tkinter widgets
+# Pythonic Tkinter
 # Copyright (C) 2016 Antoine Fourmy (antoine.fourmy@gmail.com)
 # Released under the GNU General Public License GPLv3
 
@@ -51,36 +51,43 @@ class MainFrame(CustomFrame):
         super().__init__()
         
         # label frame
-        lf_fr = LF(self, padding=(6, 6, 12, 12), text='Example with listbox')
-        lf_fr.grid(x=0, y=0)
+        lf = Labelframe(self, padding=(6, 6, 12, 12), text='Example with listbox')
                                                         
         # label + associated entry
-        label = L(self, text = 'Write something :')
-        self.entry = E(self, width=13)
+        label = Label(self)
+        label.text = 'Write something :'
+        self.entry = Entry(self, width=13)
         
         # button to add an entry in the list
-        button_add = B(self, text='Add to list', command=self.add, width=13)
+        button_add = Button(self, width=13)
+        button_add.text = 'Add to list'
+        button_add.command = self.add
         
         # button to delete and print the listbox selection
-        button_delete = B(self, text='Delete selection', command=self.delete,
-                                                                    width=13)
+        button_delete = Button(self, width=13)
+        button_delete.text = 'Delete selection'
+        button_delete.command = self.delete                               
         
         # button to empty the listbox
-        button_clear = B(self, text='Clear', command=self.clear, width=13)
+        button_clear = Button(self, width=13)
+        button_clear.text = 'Clear'
+        button_clear.command = self.clear
         
         # object listbox and associated scrollbar
-        self.listbox = LB(self, width=15, height=7)   
-        yscroll = SB(self, command=self.listbox.yview)
+        self.listbox = Listbox(self, width=15, height=7)   
+        yscroll = Scrollbar(self, command=self.listbox.yview)
         self.listbox.configure(yscrollcommand=yscroll.set)
                                         
-        # place all widgets in the grid
-        label.grid(in_=lf_fr, x=0, y=0)
-        self.entry.grid(in_=lf_fr, x=1, y=0)
-        button_add.grid(in_=lf_fr, x=2, y=0)
-        button_delete.grid(in_=lf_fr, x=3, y=0)
-        button_clear.grid(in_=lf_fr, x=4, y=0)
-        self.listbox.grid(in_=lf_fr, x=0, xs=5, y=3)
-        yscroll.grid(in_=lf_fr, x=0, xs=5, y=4)
+        # place the label frame in the toplevel window
+        lf.grid(x=0, y=0)
+        # place the widgets inside the label frame
+        label.grid(in_=lf, x=0, y=0)
+        self.entry.grid(in_=lf, x=1, y=0)
+        button_add.grid(in_=lf, x=2, y=0)
+        button_delete.grid(in_=lf, x=3, y=0)
+        button_clear.grid(in_=lf, x=4, y=0)
+        self.listbox.grid(in_=lf, x=0, xs=5, y=3)
+        yscroll.grid(in_=lf, x=0, xs=5, y=4)
         
     def add(self):
         user_input = self.entry.get()
@@ -92,6 +99,6 @@ class MainFrame(CustomFrame):
     def clear(self):
         self.listbox.clear()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     gui = GUI(path_app)
     gui.mainloop()
