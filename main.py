@@ -79,15 +79,15 @@ class MainFrame(CustomFrame):
         self.listbox.configure(yscrollcommand=yscroll.set)
                                         
         # place the label frame in the toplevel window
-        lf.grid(x=0, y=0)
+        lf.grid(0, 0)
         # place the widgets inside the label frame
-        label.grid(in_=lf, x=0, y=0)
-        self.entry.grid(in_=lf, x=1, y=0)
-        button_add.grid(in_=lf, x=2, y=0)
-        button_delete.grid(in_=lf, x=3, y=0)
-        button_clear.grid(in_=lf, x=4, y=0)
-        self.listbox.grid(in_=lf, x=0, xs=5, y=3)
-        yscroll.grid(in_=lf, x=0, xs=5, y=4)
+        label.grid(0, 0, in_=lf)
+        self.entry.grid(1, 0, in_=lf)
+        button_add.grid(2, 0, in_=lf)
+        button_delete.grid(3, 0, in_=lf)
+        button_clear.grid(4, 0, in_=lf)
+        self.listbox.grid(0, 3, 5, in_=lf)
+        yscroll.grid(0, 4, 5, in_=lf)
         
     def add(self):
         user_input = self.entry.get()
