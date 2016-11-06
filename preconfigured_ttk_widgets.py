@@ -1,3 +1,7 @@
+# Pythonic Tkinter
+# Copyright (C) 2016 Antoine Fourmy (antoine.fourmy@gmail.com)
+# Released under the GNU General Public License GPLv3
+
 ## Label, Entry, Button, LabelFrame, Listbox, Scrollbar => L, E, B, LF, LB, SB
 # the grid method is overwritten to create pre-padded (with preinitialized 
 #  padx, pady) widgets.
@@ -14,6 +18,15 @@ def overrides(interface_class):
         assert(method.__name__ in dir(interface_class))
         return method
     return overrider  
+    
+class LF(ttk.LabelFrame):
+    
+    def __init__(self, *args, **kwargs):
+
+        if 'padding' not in kwargs:
+            kwargs['padding'] = (6, 6, 12, 12)
+            
+        super().__init__(*args, **kwargs)
     
 def class_factory(name, OriginalWidget, defaults):
     
@@ -32,6 +45,7 @@ def class_factory(name, OriginalWidget, defaults):
                    'columnspan': ys,
                    'sticky': sticky
                    })
+        
         self.tk.call(('grid', 'configure', self._w) + self._options(cnf, kw))
               
     @property
@@ -62,9 +76,10 @@ subwidget_creation = (
                       ('Label', ttk.Label, (4, 4, 'w')), 
                       ('Entry', ttk.Entry, (4, 4, 'w')), 
                       ('Button', ttk.Button, (4, 4, 'w')),
-                      ('Labelframe', ttk.LabelFrame, (10, 10, 'w')),
+                      ('Labelframe', LF, (10, 10, 'w')),
                       ('Listbox', ImprovedListbox, (0, 0, 'w')),
-                      ('Scrollbar', tk.Scrollbar, (0, 0, 'ns'))
+                      ('Scrollbar', tk.Scrollbar, (0, 0, 'ns')),
+                      ('Combobox', ttk.Combobox, (4, 4, 'w'))
                       )
     
 for subwidget, ttk_class, defaults in subwidget_creation:

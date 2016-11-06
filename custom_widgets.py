@@ -1,4 +1,4 @@
-# ACLizer
+# Pythonic Tkinter
 # Copyright (C) 2016 Antoine Fourmy (antoine.fourmy@gmail.com)
 # Released under the GNU General Public License GPLv3
 
