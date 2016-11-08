@@ -2,7 +2,7 @@
 # Copyright (C) 2016 Antoine Fourmy (antoine.fourmy@gmail.com)
 # Released under the GNU General Public License GPLv3
 
-## Label, Entry, Button, LabelFrame, Listbox, Scrollbar => L, E, B, LF, LB, SB
+## Preconfigured widgets
 # the grid method is overwritten to create pre-padded (with preinitialized 
 #  padx, pady) widgets.
 # 'x' / 'y' parameters are used instead of the classic ttk row / column
@@ -17,15 +17,37 @@ def overrides(interface_class):
     def overrider(method):
         assert(method.__name__ in dir(interface_class))
         return method
-    return overrider  
+    return overrider
+        
+class MainWindow(tk.Tk):
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        color = "#A1DBCD"
+        for widget in (
+                       'Button', 
+                       'Label', 
+                       'Labelframe', 
+                       'Labelframe.Label', 
+                       'Checkbutton'
+                       ):
+            ttk.Style().configure('T' + widget, background=color)
+            
+class Menu(tk.Menu):
+    
+    def __init__(self, *args, **kwargs):
+        if 'tearoff' not in kwargs:
+            kwargs['tearoff'] = 0
+        super().__init__(*args, **kwargs)
+        
+    def entry(self, text, cmd):
+        self.add('command', {'label':text, 'command':cmd})        
+
 class LF(ttk.LabelFrame):
     
     def __init__(self, *args, **kwargs):
-
         if 'padding' not in kwargs:
             kwargs['padding'] = (6, 6, 12, 12)
-            
         super().__init__(*args, **kwargs)
     
 def class_factory(name, OriginalWidget, defaults):
@@ -58,7 +80,7 @@ def class_factory(name, OriginalWidget, defaults):
         
     widget_functions = {'grid': grid, 'text': text}
         
-    if name == 'Button':
+    if name in ('Button', 'Checkbutton'):
         @property
         def command(self):
             self.cget('command')
@@ -79,7 +101,8 @@ subwidget_creation = (
                       ('Labelframe', LF, (10, 10, 'w')),
                       ('Listbox', ImprovedListbox, (0, 0, 'w')),
                       ('Scrollbar', tk.Scrollbar, (0, 0, 'ns')),
-                      ('Combobox', ttk.Combobox, (4, 4, 'w'))
+                      ('Combobox', ttk.Combobox, (4, 4, 'w')),
+                      ('Checkbutton', ttk.Checkbutton, (4, 4, 'w'))
                       )
     
 for subwidget, ttk_class, defaults in subwidget_creation:
