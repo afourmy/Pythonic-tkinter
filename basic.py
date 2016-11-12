@@ -9,13 +9,12 @@ from os.path import abspath
 # prevent python from writing *.pyc files / __pycache__ folders
 sys.dont_write_bytecode = True
 
-path_app = abspath(getsourcefile(lambda: 0))[:-7]
+path_app = abspath(getsourcefile(lambda: 0))[:-8]
 if path_app not in sys.path:
     sys.path.append(path_app)
 
 import os
 import tkinter as tk
-from custom_widgets import CustomFrame, FocusTopLevel
 from preconfigured_ttk_widgets import *
 from tkinter import ttk
 
@@ -26,11 +25,10 @@ class GUI(MainWindow):
         
         # A ttk notebook made of two frames
         frame_notebook = ttk.Notebook(self)
-        first_frame = FirstFrame()
-        second_frame = SecondFrame()
-        frame_notebook.add(first_frame, text='Frame 1')
-        frame_notebook.add(second_frame, text='Frame 2')
-        frame_notebook.pack(side=tk.LEFT, fill=tk.BOTH)
+        frame_notebook.add(FirstFrame(), text='Listbox')
+        frame_notebook.add(SecondFrame(), text='Combobox')
+        frame_notebook.add(ThirdFrame(), text='Window')
+        frame_notebook.pack()
             
         # title of the main window
         self.title('Title')
@@ -38,11 +36,10 @@ class GUI(MainWindow):
         # main menu
         menubar = Menu(self)
         upper_menu = Menu(menubar)
-        # upper_menu('Second menu', lambda: _)
-        # upper_menu.add_separator()
+        upper_menu.entry('First entry', lambda: _)
+        upper_menu.add_separator()
         upper_menu.entry('Separated menu', lambda: _)
-        # upper_menu.entry('First menu', lambda: _)
-        menubar.add_cascade(label='Main menu',menu=upper_menu)
+        menubar.add_cascade(label='Main menu', menu=upper_menu)
         self.config(menu=menubar)
         
 class FirstFrame(CustomFrame):
@@ -61,7 +58,8 @@ class FirstFrame(CustomFrame):
         
         # object listbox and associated scrollbar
         listbox = Listbox(self, width=15, height=7)   
-        yscroll = Scrollbar(self, command=listbox.yview)
+        yscroll = Scrollbar(self)
+        yscroll.command = listbox.yview
         listbox.configure(yscrollcommand=yscroll.set)
         
         # button to add an entry in the list
@@ -97,7 +95,7 @@ class SecondFrame(CustomFrame):
         
         # label frame
         lf = Labelframe(self)
-        lf.text = 'Interdependent combobox'
+        lf.text = 'Interdependent Combobox'
     
         # first combobox
         self.combobox1 = Combobox(self, width=11)
@@ -109,23 +107,54 @@ class SecondFrame(CustomFrame):
         self.combobox2 = Combobox(self, width=11)
         self.combobox2.set('Initial value')
         
-        # button to create a FocusTopLevelWindow
-        button = Button(self)
-        button.text = 'Window with focus'
-        button.command = FocusTopLevel
-        
         # place the labelframe in the frame
         lf.grid(0, 0)
         # place widgets in the labelframe
         self.combobox1.grid(0, 0, in_=lf)
         self.combobox2.grid(1, 0, in_=lf)
-        button.grid(2, 0, in_=lf)
         
     def update(self, _):
         value = self.combobox1.get()
         values = {'A': ('1', '2'), 'B': ('3', '4')}
         self.combobox2['values'] = values[value]
         self.combobox2.current(0)
+        
+class TopLevel1(CustomTopLevel):
+
+    def __init__(self):
+        super().__init__()
+        
+        label1 = Label(self)
+        label1.text = 'First window'
+        label1.grid(0, 0)
+        
+class TopLevel2(FocusTopLevel):
+
+    def __init__(self):
+        super().__init__()
+        
+        label1 = Label(self)
+        label1.text = 'Second window'
+        label1.grid(1, 0)
+
+class ThirdFrame(CustomFrame):
+    
+    def __init__(self):
+        super().__init__()
+        
+        # button to create a FocusTopLevelWindow
+        button1 = Button(self)
+        button1.text = 'Normal window'
+        button1.command = TopLevel1
+        
+        # button to create a FocusTopLevelWindow
+        button2 = Button(self)
+        button2.text = 'Window with focus button'
+        button2.command = TopLevel2
+        
+        # place widgets in the grid
+        button1.grid(0, 0)
+        button2.grid(1, 0)
 
 if __name__ == '__main__':
     gui = GUI()
