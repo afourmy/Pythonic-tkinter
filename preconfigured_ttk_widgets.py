@@ -1,14 +1,3 @@
-# Pythonic Tkinter
-# Copyright (C) 2016 Antoine Fourmy (antoine.fourmy@gmail.com)
-# Released under the GNU General Public License GPLv3
-
-## Preconfigured widgets
-# the grid method is overwritten to create pre-padded (with preinitialized 
-#  padx, pady) widgets.
-# 'x' / 'y' parameters are used instead of the classic ttk row / column
-# arguments, and 'xs' / 'ys' replace rowspan and columnspan.
-# sticky is initialized to its most common value: west (~ left)
-
 import tkinter as tk
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
