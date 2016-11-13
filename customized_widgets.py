@@ -1,7 +1,3 @@
-# Pythonic Tkinter
-# Copyright (C) 2016 Antoine Fourmy (antoine.fourmy@gmail.com)
-# Released under the GNU General Public License GPLv3
-
 import sys
 from inspect import getsourcefile
 from os.path import abspath
@@ -13,10 +9,7 @@ path_app = abspath(getsourcefile(lambda: 0))[:-8]
 if path_app not in sys.path:
     sys.path.append(path_app)
 
-import os
-import tkinter as tk
 from preconfigured_ttk_widgets import *
-from tkinter import ttk
 
 class GUI(MainWindow):
     
@@ -24,7 +17,7 @@ class GUI(MainWindow):
         super().__init__()
         
         # A ttk notebook made of two frames
-        frame_notebook = ttk.Notebook(self)
+        frame_notebook = Notebook(self)
         frame_notebook.add(FirstFrame(), text='Listbox')
         frame_notebook.add(SecondFrame(), text='Combobox')
         frame_notebook.add(ThirdFrame(), text='Window')

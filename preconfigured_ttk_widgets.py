@@ -13,7 +13,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
             
-def overrides(interface_class):
+def overrider(interface_class):
     def overrider(method):
         assert(method.__name__ in dir(interface_class))
         return method
@@ -136,7 +136,18 @@ class Menu(tk.Menu):
         super().__init__(*args, **kwargs)
         
     def entry(self, text, cmd):
-        self.add('command', {'label':text, 'command':cmd})        
+        self.add('command', {'label':text, 'command':cmd})   
+        
+class Notebook(ttk.Notebook):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+class Canvas(tk.Canvas):
+    
+    @defaultizer(background='white', width=1000, height=800)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class LF(ttk.LabelFrame):
     
@@ -148,7 +159,7 @@ def class_factory(name, OriginalWidget, defaults):
     
     px, py, sy = defaults
         
-    @overrides(OriginalWidget)
+    @overrider(OriginalWidget)
     def grid(self, x, y, xs=1, ys=1, padx=px, pady=py, sticky=sy, cnf={}, **kw):
         # x (resp. y) is the row (resp. column) number
         # xs and ys stands for xspan / yspan (~ rowspan / columnspan)
