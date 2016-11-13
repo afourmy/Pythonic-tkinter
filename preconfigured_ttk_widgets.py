@@ -103,6 +103,13 @@ class ImprovedListbox(tk.Listbox):
             self.delete(row_id)
             self.insert(row_id + 1 - 2*(row_id > self.cur_index), value)
             self.cur_index = row_id
+            
+class NoDuplicateListbox(ImprovedListbox):
+    
+    @overrider(ImprovedListbox)
+    def insert(self, obj):
+        if str(obj) not in self:
+            super(ObjectListbox, self).insert(tk.END, obj)
         
 class MainWindow(tk.Tk):
     
@@ -168,9 +175,18 @@ def class_factory(name, OriginalWidget, defaults):
     def text(self):
         return self.get()
         
-    @text.setter
-    def text(self, value):
-        self.configure(text=value)
+    if name == 'Entry':
+        
+        @text.setter
+        def text(self, value):
+            self.delete(0, 'end')
+            self.insert(0, value)
+            
+    else:
+        
+        @text.setter
+        def text(self, value):
+            self.configure(text=value)
         
     widget_functions = {'grid': grid, 'text': text}
         
@@ -195,6 +211,7 @@ subwidget_creation = (
                       ('Button', ttk.Button, (4, 4, 'w')),
                       ('Labelframe', LF, (10, 10, 'w')),
                       ('Listbox', ImprovedListbox, (0, 0, 'w')),
+                      ('ObjectListbox', NoDuplicateListbox, (0, 0, 'w')),
                       ('Scrollbar', tk.Scrollbar, (0, 0, 'ns')),
                       ('Combobox', ttk.Combobox, (4, 4, 'w')),
                       ('Checkbutton', ttk.Checkbutton, (4, 4, 'w'))
