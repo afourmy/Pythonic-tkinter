@@ -65,8 +65,8 @@ class ImprovedListbox(tk.Listbox):
     def __contains__(self, obj):
         return obj in self.get(0, 'end')
         
-    def insert(self, obj):
-        super(ImprovedListbox, self).insert('end', obj)
+    def insert(self, obj, i='end'):
+        super(ImprovedListbox, self).insert(i, obj)
         
     def yield_all(self):
         for obj in self.get(0, 'end'):
@@ -101,15 +101,15 @@ class ImprovedListbox(tk.Listbox):
         value = self.get(row_id)
         if row_id != self.cur_index:
             self.delete(row_id)
-            self.insert(row_id + 1 - 2*(row_id > self.cur_index), value)
+            self.insert(value, row_id + 1 - 2*(row_id > self.cur_index))
             self.cur_index = row_id
             
 class NoDuplicateListbox(ImprovedListbox):
     
     @overrider(ImprovedListbox)
-    def insert(self, obj):
+    def insert(self, obj, i='end'):
         if str(obj) not in self:
-            super(ObjectListbox, self).insert(tk.END, obj)
+            super(NoDuplicateListbox, self).insert(obj, i)
         
 class MainWindow(tk.Tk):
     

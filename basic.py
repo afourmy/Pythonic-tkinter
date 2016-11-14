@@ -7,7 +7,6 @@ sys.dont_write_bytecode = True
 
 path_app = abspath(getsourcefile(lambda: 0))[:-8]
 if path_app not in sys.path:
-    print(path_app)
     sys.path.append(path_app)
 
 from preconfigured_ttk_widgets import *
