@@ -125,14 +125,40 @@ class MainWindow(tk.Tk):
                        ):
             ttk.Style().configure('T' + widget, background=color)
             
+class MenuEntry(object):
+    
+    def __init__(self, menu):
+        menu.menu_entries.append(self)
+        self.label = 'Menu text'
+        self.cmd = lambda: None
+        
+    @property
+    def text(self):
+        return self.label
+        
+    @text.setter
+    def text(self, value):
+        self.label = value
+        
+    @property
+    def command(self):
+        return self.command
+        
+    @command.setter
+    def command(self, cmd):
+        self.cmd = cmd
+        
+            
 class Menu(tk.Menu):
     
     @defaultizer(tearoff=0)
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.menu_entries = []
         
-    def entry(self, text, cmd):
-        self.add('command', {'label':text, 'command':cmd})   
+    def create_menu(self):
+        for entry in self.menu_entries:
+            self.add('command', {'label': entry.label, 'command': entry.cmd})  
         
 class Notebook(ttk.Notebook):
     

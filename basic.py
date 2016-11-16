@@ -29,11 +29,16 @@ class GUI(MainWindow):
         # main menu
         menubar = Menu(self)
         upper_menu = Menu(menubar)
-        upper_menu.entry('First entry', lambda: _)
+        first = MenuEntry(upper_menu)
+        first.text = 'First entry'
+        first.command = self.print42
         upper_menu.add_separator()
-        upper_menu.entry('Separated menu', lambda: _)
+        upper_menu.create_menu()
         menubar.add_cascade(label='Main menu', menu=upper_menu)
         self.config(menu=menubar)
+        
+    def print42(self):
+        print(42)
         
 class FirstFrame(CustomFrame):
     
