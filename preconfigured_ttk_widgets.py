@@ -117,7 +117,8 @@ class MainWindow(tk.Tk):
         super().__init__(*args, **kwargs)
         color = '#A1DBCD'
         for widget in (
-                       'Button', 
+                       'Button',
+                       'Radiobutton',
                        'Label', 
                        'Labelframe', 
                        'Labelframe.Label', 
@@ -208,6 +209,13 @@ def class_factory(name, OriginalWidget, defaults):
             self.delete(0, 'end')
             self.insert(0, value)
             
+    elif name =='Text':
+        
+        @text.setter
+        def text(self, value):
+            self.delete('1.0', 'end')
+            self.insert('1.0', value)
+            
     else:
         
         @text.setter
@@ -232,9 +240,11 @@ def class_factory(name, OriginalWidget, defaults):
     globals()[name] = newclass
     
 subwidget_creation = (
-                      ('Label', ttk.Label, (4, 4, 'w')), 
-                      ('Entry', ttk.Entry, (4, 4, 'w')), 
+                      ('Label', ttk.Label, (4, 4, 'w')),
+                      ('Text', tk.Text, (4, 4, 'w')),
+                      ('Entry', ttk.Entry, (4, 4, 'w')),
                       ('Button', ttk.Button, (4, 4, 'w')),
+                      ('Radiobutton', ttk.Radiobutton, (4, 4, 'w')),
                       ('Labelframe', LF, (10, 10, 'w')),
                       ('Listbox', ImprovedListbox, (0, 0, 'w')),
                       ('ObjectListbox', NoDuplicateListbox, (0, 0, 'w')),
