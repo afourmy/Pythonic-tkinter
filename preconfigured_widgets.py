@@ -148,7 +148,6 @@ class MenuEntry(object):
     @command.setter
     def command(self, cmd):
         self.cmd = cmd
-        
             
 class Menu(tk.Menu):
     
@@ -215,6 +214,12 @@ def class_factory(name, OriginalWidget, defaults):
         def text(self, value):
             self.delete('1.0', 'end')
             self.insert('1.0', value)
+            
+    elif name =='Combobox':
+        
+        @text.setter
+        def text(self, value):
+            self.set(str(value))
             
     else:
         
