@@ -156,9 +156,15 @@ class Menu(tk.Menu):
         super().__init__(*args, **kwargs)
         self.menu_entries = []
         
+    def separator(self):
+        self.menu_entries.append('separator')
+        
     def create_menu(self):
         for entry in self.menu_entries:
-            self.add('command', {'label': entry.label, 'command': entry.cmd})  
+            if entry == 'separator':
+                self.add_separator()
+            else:
+                self.add('command', {'label': entry.label, 'command': entry.cmd})  
         
 class Notebook(ttk.Notebook):
     
