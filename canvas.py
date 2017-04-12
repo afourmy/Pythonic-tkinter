@@ -10,7 +10,7 @@ if path_app not in sys.path:
     sys.path.append(path_app)
 
 from os.path import abspath, pardir, join
-from preconfigured_ttk_widgets import *
+from preconfigured_widgets import *
 from math import cos, sin
 from random import choice
 from PIL import ImageTk
@@ -40,11 +40,39 @@ class GUI(MainWindow):
 
         # main menu
         menubar = Menu(self)
-        upper_menu = Menu(menubar)
-        upper_menu.entry('Move', galaxy.move)
-        upper_menu.entry('Stop moving', galaxy.stop)
-        upper_menu.entry('Draw', galaxy.draw)
-        menubar.add_cascade(label='Main menu', menu=upper_menu)
+        
+
+        
+        # test = Menu(menubar)
+        
+        ooo = Menu(menubar)
+        
+        move_entry = MenuEntry(ooo)
+        move_entry.text = 'Move'
+        move_entry.cmd = galaxy.move
+        
+        move_entry1 = MenuEntry(ooo)
+        move_entry1.text = 'Move'
+        move_entry1.cmd = galaxy.move
+        
+        move_entry2 = MenuEntry(ooo)
+        move_entry2.text = 'Move'
+        move_entry2.cmd = galaxy.move
+        
+        inner_menu = MenuCascade(menubar)
+        inner_menu.imenu = ooo
+        inner_menu.text = 'inner_menu'
+
+        # menubar.add_cascade(label='Main menu', menu=ooo)
+
+        
+        # upper_menu = Menu(menubar)
+        # upper_menu.entry('Move', galaxy.move)
+        # upper_menu.entry('Stop moving', galaxy.stop)
+        # upper_menu.entry('Draw', galaxy.draw)
+        # upper_menu.create_menu()
+        # menubar.add_cascade(label='Main menu', menu=upper_menu)
+        # menubar.create_menu()
         self.config(menu=menubar)
         
 class Galaxy(Canvas):
@@ -90,10 +118,10 @@ class Galaxy(Canvas):
     def move(self):
         self.time += 1
         # compute the position of the earth / moon on the canvas
-        x = 550 + 400 * cos(self.time * 0.0005)
-        y = 400 + 200 * sin(self.time * 0.0005)
-        p = x + 40 * cos(2 + self.time * 0.01)
-        q = y + 40 * sin(2 + self.time * 0.01)
+        x = 550 + 400 * cos(self.time * 0.00005)
+        y = 400 + 200 * sin(self.time * 0.00005)
+        p = x + 40 * cos(2 + self.time * 0.001)
+        q = y + 40 * sin(2 + self.time * 0.001)
         # if the drawing mode is activated, draw a line every 20 iterations
         if self.draw_lines and not self.time % 20:
             # choose a random color

@@ -129,42 +129,50 @@ class MainWindow(tk.Tk):
 class MenuEntry(object):
     
     def __init__(self, menu):
-        menu.menu_entries.append(self)
-        self.label = 'Menu text'
-        self.cmd = lambda: None
+        self.index = menu.index
+        menu.index += 1
+        self.menu = menu 
+        self.menu.add('command', {})
         
     @property
     def text(self):
-        return self.label
+        self.menu.entrycget(self.index, 'text')
         
     @text.setter
     def text(self, value):
-        self.label = value
+        self.menu.entryconfigure(self.index, label=value)
         
     @property
     def command(self):
-        return self.command
+        self.menu.entrycget(self.index, 'label')
         
     @command.setter
-    def command(self, cmd):
-        self.cmd = cmd
+    def command(self, value):
+        self.menu.entryconfig(self.index, command=value)
             
 class Menu(tk.Menu):
     
     @defaultizer(tearoff=0)
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.menu_entries = []
+        self.index = 1
         
     def separator(self):
         self.menu_entries.append('separator')
         
-    def create_menu(self):
-        for entry in self.menu_entries:
-            if entry == 'separator':
-                self.add_separator()
-            else:
-                self.add('command', {'label': entry.label, 'command': entry.cmd})  
+class MenuCascade(object):
+
+    def __init__(self, menu):
+        self.menu = menu
+        
+    @property
+    def menu(self):
+        return self.inner
+        
+    @menu.setter
+    def menu(self, value):
+        self.menu.add_cascade(label='test', menu=value)
+        self.inner = value
         
 class Notebook(ttk.Notebook):
     
