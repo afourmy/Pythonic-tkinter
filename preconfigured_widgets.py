@@ -18,6 +18,36 @@ def defaultizer(**default_kwargs_values):
             init(self, *args, **kwargs)
         return wrapper
     return inner_decorator
+        
+class Binding(object):
+    
+    def __init__(self, canvas, tag=None, add=''):
+        self.canvas = canvas
+        self.add = add
+        self.tag = tag
+        
+    def bind(self):
+        if not self.tag:
+            self.canvas.bind(self.event, self.command, self.add)
+        else:
+            self.canvas.tag_bind(self.tag, self.event, self.command, self.add) 
+        
+    def unbind(self):
+        if not self.tag:
+            self.canvas.unbind(self.event)
+        else:
+            self.canvas.tag_unbind(self.tag, self.event)
+            
+class Canvas(tk.Canvas):
+    
+    @defaultizer(background='white', width=1000, height=800)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+    # bind multiple bindings at once
+    def binds(self, *bindings):
+        for binding in bindings:
+            binding.bind()
 
 class CustomFrame(tk.Frame):
     
@@ -126,6 +156,30 @@ class MainWindow(tk.Tk):
                        ):
             ttk.Style().configure('T' + widget, background=color)
             
+class Menu(tk.Menu):
+    
+    @defaultizer(tearoff=0)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.index = 1
+        
+    def separator(self):
+        self.menu_entries.append('separator')
+        
+class MenuCascade(object):
+
+    def __init__(self, menu):
+        self.menu = menu
+        
+    @property
+    def inner_menu(self):
+        return self.inner
+        
+    @inner_menu.setter
+    def inner_menu(self, value):
+        self.menu.add_cascade(label=self.text, menu=value)
+        self.inner = value
+        
 class MenuEntry(object):
     
     def __init__(self, menu):
@@ -144,44 +198,14 @@ class MenuEntry(object):
         
     @property
     def command(self):
-        self.menu.entrycget(self.index, 'label')
+        self.menu.entrycget(self.index, 'command')
         
     @command.setter
     def command(self, value):
         self.menu.entryconfig(self.index, command=value)
-            
-class Menu(tk.Menu):
-    
-    @defaultizer(tearoff=0)
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.index = 1
-        
-    def separator(self):
-        self.menu_entries.append('separator')
-        
-class MenuCascade(object):
-
-    def __init__(self, menu):
-        self.menu = menu
-        
-    @property
-    def menu(self):
-        return self.inner
-        
-    @menu.setter
-    def menu(self, value):
-        self.menu.add_cascade(label='test', menu=value)
-        self.inner = value
         
 class Notebook(ttk.Notebook):
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-class Canvas(tk.Canvas):
-    
-    @defaultizer(background='white', width=1000, height=800)
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

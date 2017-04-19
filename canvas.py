@@ -41,38 +41,24 @@ class GUI(MainWindow):
         # main menu
         menubar = Menu(self)
         
-
+        imenu = Menu(menubar)
         
-        # test = Menu(menubar)
-        
-        ooo = Menu(menubar)
-        
-        move_entry = MenuEntry(ooo)
+        move_entry = MenuEntry(imenu)
         move_entry.text = 'Move'
-        move_entry.cmd = galaxy.move
+        move_entry.command = galaxy.move
         
-        move_entry1 = MenuEntry(ooo)
-        move_entry1.text = 'Move'
-        move_entry1.cmd = galaxy.move
+        stop_entry = MenuEntry(imenu)
+        stop_entry.text = 'Stop'
+        stop_entry.command = galaxy.stop
         
-        move_entry2 = MenuEntry(ooo)
-        move_entry2.text = 'Move'
-        move_entry2.cmd = galaxy.move
+        draw_entry = MenuEntry(imenu)
+        draw_entry.text = 'Draw'
+        draw_entry.command = galaxy.draw
         
-        inner_menu = MenuCascade(menubar)
-        inner_menu.imenu = ooo
-        inner_menu.text = 'inner_menu'
+        cascade = MenuCascade(menubar)
+        cascade.text = 'Cascade'
+        cascade.inner_menu = imenu
 
-        # menubar.add_cascade(label='Main menu', menu=ooo)
-
-        
-        # upper_menu = Menu(menubar)
-        # upper_menu.entry('Move', galaxy.move)
-        # upper_menu.entry('Stop moving', galaxy.stop)
-        # upper_menu.entry('Draw', galaxy.draw)
-        # upper_menu.create_menu()
-        # menubar.add_cascade(label='Main menu', menu=upper_menu)
-        # menubar.create_menu()
         self.config(menu=menubar)
         
 class Galaxy(Canvas):
@@ -84,8 +70,15 @@ class Galaxy(Canvas):
         self.focus_force()
         
         # use the right-click to move the background
-        self.bind('<ButtonPress-1>', self.scroll_start)
-        self.bind('<B1-Motion>', self.scroll_move)
+        scroll_binding_start = Binding(self)
+        scroll_binding_start.event = '<ButtonPress-1>'
+        scroll_binding_start.command = self.scroll_start
+        
+        scroll_binding_move = Binding(self)
+        scroll_binding_move.event = '<B1-Motion>'
+        scroll_binding_move.command = self.scroll_move
+        
+        self.binds(scroll_binding_start, scroll_binding_move)
         
         self.motion = None
         
