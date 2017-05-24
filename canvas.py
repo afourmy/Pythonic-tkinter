@@ -10,7 +10,7 @@ if path_app not in sys.path:
     sys.path.append(path_app)
 
 from os.path import abspath, pardir, join
-from preconfigured_widgets import *
+from pythonic_tkinter import *
 from math import cos, sin
 from random import choice
 from PIL import ImageTk

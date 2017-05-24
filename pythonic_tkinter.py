@@ -18,25 +18,28 @@ def defaultizer(**default_kwargs_values):
             init(self, *args, **kwargs)
         return wrapper
     return inner_decorator
+    
+COLOR = 'lavender'
         
 class Binding(object):
     
-    def __init__(self, canvas, tag=None, add=''):
-        self.canvas = canvas
+    def __init__(self, parent, *tags, add=''):
+        self.parent = parent
         self.add = add
-        self.tag = tag
+        self.tags = tags
         
     def bind(self):
-        if not self.tag:
-            self.canvas.bind(self.event, self.command, self.add)
+        if not self.tags:
+            self.parent.bind(self.event, self.command, self.add)
         else:
-            self.canvas.tag_bind(self.tag, self.event, self.command, self.add) 
+            for tag in self.tags:
+                self.parent.tag_bind(tag, self.event, self.command, self.add) 
         
     def unbind(self):
         if not self.tag:
-            self.canvas.unbind(self.event)
+            self.parent.unbind(self.event)
         else:
-            self.canvas.tag_unbind(self.tag, self.event)
+            self.parent.tag_unbind(self.tag, self.event)
             
 class Canvas(tk.Canvas):
     
@@ -53,15 +56,13 @@ class CustomFrame(tk.Frame):
     
     def __init__(self):
         super().__init__()
-        color = '#A1DBCD'
-        self.configure(background=color)        
+        self.configure(background=COLOR)        
         
 class CustomTopLevel(tk.Toplevel):
     
     def __init__(self):
         super().__init__()
-        color = '#A1DBCD'
-        self.configure(background=color)        
+        self.configure(background=COLOR)        
         
 class FocusTopLevel(CustomTopLevel):
     
@@ -145,7 +146,7 @@ class MainWindow(tk.Tk):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        color = '#A1DBCD'
+        self.configure(background=COLOR)  
         for widget in (
                        'Button',
                        'Radiobutton',
@@ -154,7 +155,7 @@ class MainWindow(tk.Tk):
                        'Labelframe.Label', 
                        'Checkbutton'
                        ):
-            ttk.Style().configure('T' + widget, background=color)
+            ttk.Style().configure('T' + widget, background=COLOR)
             
 class Menu(tk.Menu):
     
