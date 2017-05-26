@@ -44,7 +44,7 @@ class PythonicTkinter(pt.MainWindow):
         label.text = 'Write something :'
         label.grid(0, 0)
         
-        self.entry = pt.Entry(self, width=17)
+        self.entry = pt.Entry(self, width=16)
         self.entry.grid(1, 0)
         
         button = pt.Button(self, width=16)
@@ -57,5 +57,5 @@ class PythonicTkinter(pt.MainWindow):
         self.destroy()
         
 if __name__ == '__main__':
-    example = PythonicTkinter()
+    example = ClassicTkinter()
     example.mainloop()

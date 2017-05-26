@@ -21,7 +21,7 @@ class GUI(MainWindow):
         super().__init__()
         
         path_parent = abspath(join(path_app, pardir))
-        path_icon = join(path_app, 'Icons')
+        path_icon = join(path_app, 'images')
         
         # dictionnary containing all images 
         self.dict_img = {}
